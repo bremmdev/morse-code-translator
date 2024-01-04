@@ -7,6 +7,9 @@ import re
 from pydub import AudioSegment
 from pydub.generators import Sine
 
+class InvalidMorseCodeError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
 
 class Morse:
     """
@@ -43,6 +46,14 @@ class Morse:
         :return: The encrypted Morse code.
         """
         # morse code is always uppercase
+
+        if text == '':
+            raise ValueError('Input is empty')
+
+        invalid_chars = re.sub('[A-Z0-9 \-\.]', '', text.upper())
+        if invalid_chars:
+            raise ValueError(f'Invalid characters found: {invalid_chars}')
+
         words = text.upper().split(' ')
         morse_result = ""
 
@@ -73,6 +84,9 @@ class Morse:
             natural_language += "".join([cls.inverted_morse_code.get(
                 morse_symbol, '?') for morse_symbol in morse_word])
             natural_language += ' '
+
+        if '?' in natural_language:
+            raise InvalidMorseCodeError('Invalid Morse code')
 
         # remove the last space
         natural_language = natural_language[:-1]
