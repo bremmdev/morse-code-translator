@@ -101,26 +101,27 @@ class Morse:
         :param text: The text to be converted to Morse code audio.
         :return: The Morse code audio.
         """
-        # a dot lasts for one second
-        # a dash last for three seconds
-        # the space between dots and dashes that are part of the same letter is one second
-        # the space between different letters is three seconds
-        # the space between different words is seven seconds
+        # a dot lasts for one unit
+        # a dash last for three units
+        # the space between dots and dashes that are part of the same letter is one unit
+        # the space between different letters is three units
+        # the space between different words is seven units
 
         morse_code = cls.encrypt(text).replace(' / ', '/')
+        print(morse_code)
 
         # create morse code audio
-        morse_audio = AudioSegment.empty()
+        morse_audio = AudioSegment.empty()    
 
-       # iterate over all characters in the text
+        # iterate over all characters in the text
         for i, char in enumerate(morse_code):
             if char == '.' or char == '-':
                 # if it's a dot or a dash, add the morse code beep
                 morse_audio += cls.generate_morse_code_beep(char)
                 if i < len(morse_code) - 1 and morse_code[i + 1] != ' ' and morse_code[i + 1] != '/':
-                    # if the next character is not a space, add a 1 second space
+                    # if the next character is not a space, add a 1 unit space
                     morse_audio += AudioSegment.silent(duration=cls.SPACE_BETWEEN_LETTERS_DURATION)
-            # space between letters in the same word is 1 second
+            # space between letters in the same word is 1 unit
             elif char == ' ' or char == '/':
                 duration = cls.DASH_DURATION if char == ' ' else cls.SPACE_BETWEEN_WORDS_DURATION
                 morse_audio += AudioSegment.silent(duration=duration)
