@@ -108,7 +108,6 @@ class Morse:
         # the space between different words is seven units
 
         morse_code = cls.encrypt(text).replace(' / ', '/')
-        print(morse_code)
 
         # create morse code audio
         morse_audio = AudioSegment.empty()    
